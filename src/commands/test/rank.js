@@ -1,29 +1,44 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { RankCardBuilder } = require('discord-card-canvas');
-const { writeFileSync } = require('fs');
+const axios = require('axios');
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('rank')
-    .setDescription('Return my rank!'),
+    .setDescription('Return my rank!')
+    .addUserOption((option) =>
+      option
+        .setName('target')
+        .setDescription("The member you'd like to check rank.")
+        .setRequired(false)
+    ),
   async execute(interaction, client) {
+    let user;
+    user = interaction.options.getUser('target');
+    if (!user) user = interaction.user;
+    const { data } = await axios.get(
+      'http://3.71.14.243:5021/openapi/discord/stats/user?id=666'
+    );
+    // const { data } = await axios.get(
+    //   `http://3.71.14.243:5021/openapi/discord/stats/user?id=${user.id}`
+    // );
     const canvasRank = await new RankCardBuilder({
-      currentLvl: 102,
-      currentRank: 563,
-      currentXP: 71032,
-      requiredXP: 95195,
+      currentLvl: data.currentLvl,
+      currentRank: data.currentRank,
+      currentXP: data.currentXP,
+      requiredXP: data.requiredXP,
       backgroundColor: '#070D26',
-      avatarImgURL:
-        'https://ps.w.org/image-comparison/assets/icon-256x256.png?rev=2587037',
+      avatarImgURL: data.avatarImgURL,
       nicknameText: {
-        content: interaction.user.username,
+        content: data.nicknameText.content,
+        color: '#F5A22E',
       },
       userStatus: 'online',
       colorTextDefault: '#CBCCD2',
       progressBarColor: '#F74747',
-      avatarBackgroundColor: '#F74747',
+      avatarBackgroundColor: '#F5A22E',
       currentXPColor: '#F5A22E',
-      avatarBackgroundEnable: false,
+      avatarBackgroundEnable: true,
     }).build();
     await interaction.reply({
       files: [{ attachment: canvasRank.toBuffer(), name: 'rank.png' }],
