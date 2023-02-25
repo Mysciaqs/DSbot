@@ -24,9 +24,14 @@ module.exports = {
         content: `➕ | The **${verificationRole.name}** role has been added successfully!`,
         ephemeral: true,
       });
-    } else {
+    } else if (data.code == 404) {
       await interaction.reply({
-        content: `Something went wrong!`,
+        content: `Email not exists in our database!`,
+        ephemeral: true,
+      });
+    } else if (data.code == 204) {
+      await interaction.reply({
+        content: `Email already exists and discord ids do not match!`,
         ephemeral: true,
       });
     }
