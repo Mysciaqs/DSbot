@@ -25,8 +25,8 @@ client.buttons = new Collection();
 client.selectMenus = new Collection();
 client.modals = new Collection();
 client.commandArray = [];
-client.color = '#94fa92';
-client.errorColor = '#ff6961';
+client.color = '#F74747';
+client.errorColor = '#FF6961';
 
 const functionFolders = readdirSync('./src/functions');
 for (const folder of functionFolders) {

@@ -17,7 +17,7 @@ module.exports = {
     user = interaction.options.getUser('target');
     if (!user) user = interaction.user;
     const { data } = await axios.get(
-      'http://3.71.14.243:5021/openapi/discord/stats/user?id=666'
+      `${process.env.API_URL}/discord/stats/user?id=666`
     );
     // const { data } = await axios.get(
     //   `http://3.71.14.243:5021/openapi/discord/stats/user?id=${user.id}`
